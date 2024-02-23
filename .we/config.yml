@@ -1,0 +1,31 @@
+descriptor_version: "2.0"
+project:
+  team_id: CT-242
+apps:
+  - name: trfk
+    build:
+      - name: build
+        type: docker
+        repository: quay.io/marti_martinez/trfk
+        artifact_name: trfk
+    deploy:
+      - type: service
+        name: service-0
+        target_name: wek8s-dev-kenny-us-west
+        artifact_name: trfk
+        command: dotnet trfk.dll
+        requests:
+          cpu: 10m
+          ram: 16Mi
+        limits:
+          cpu: 250m
+          ram: 256Mi
+        ports:
+          default: "80"
+        namespace: wectl
+        class: http
+        instances: 2
+        deploy_strategy: rolling
+        vpa:
+          enabled: true
+          updateMode: Auto
